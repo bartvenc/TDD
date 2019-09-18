@@ -19,10 +19,21 @@ COMPILER_FLAGS = -g -w -std=c++17
 LINKER_FLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf
 
 #OBJ_NAME specifies the name of our exectuable
-OBJ_NAME = main
+OBJ_NAME = dist/main
+
+PHONY: clean make-dist all
 
 #This is the target that compiles our executable
 %.o: %.c $(DEPS)
 	$(CC) $(COMPILER_FLAGS) -c -o $@ $<
-all : $(OBJS)
+
+clean:
+	$(RM) -rf dist
+
+make-dist:
+	mkdir dist
+
+compile : $(OBJS)
 	$(CC) $(OBJS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OBJ_NAME)
+
+all: compile
