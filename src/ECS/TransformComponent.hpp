@@ -15,7 +15,7 @@ public:
 	int width = 64;
 	int scale = 1;
 
-	int speed = 3;
+	int speed = 1;
 
 
 	TransformComponent(){
@@ -44,7 +44,21 @@ public:
 		width = w;
 		scale = scale;
 	}
-	
+
+		TransformComponent(float x, float y, float velX, float velY, int h, int w, int sc){
+		position.x = x;
+		position.y = y;
+		height = h;
+		width = w;
+		scale = scale;
+		velocity.x = velX;
+		velocity.y = velY;
+	}
+
+	void printPosition(){
+		printf("pos = %d, %d, \n",position.x, position.y  );
+	}
+		
 	void init() override{
 		velocity.Zero();
 	}

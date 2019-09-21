@@ -63,7 +63,7 @@ public:
 
 		}
 
-
+		//transform->printPosition();
 
 
 /*

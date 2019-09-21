@@ -5,8 +5,9 @@
 #include "ECS/Components.hpp"
 #include "Vector2D.hpp"
 #include "Collision.hpp"
-
-
+#include "Enemy.hpp"
+int way = 0;
+int enemyID = 0;
 bool onButton;
 
 Map* map;
@@ -16,23 +17,17 @@ SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
 
 std::vector<ColliderComponent*> Game::colliders;
+std::vector<Enemy*> enemyList;
+std::vector<Vector2D> Game::path;
+
 
 auto& player(manager.addEntity());
-auto& wall(manager.addEntity());
 
 auto& button(manager.addEntity());
 
+Enemy *enemy = new Enemy(&manager);
+Enemy *enemy1 = new Enemy(&manager);
 const char* mapfile = "assets/TileSet.png";
-
-enum groupLabels : std::size_t{
-	groupMap,
-	groupPlayers,
-	groupEnemies,
-	groupColiders,
-	groupButtons,
-};
-
-
 
 Game::Game()
 {}
@@ -61,29 +56,37 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 		if(renderer){
 			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 			printf("Renderer created! \n");
+			//SDL_RenderSetViewport(renderer, &view);
 		}
 	
 		isRunning = true;
 	}
+  
 
-	//player = new GameObject("assets/Goku2.png", 0, 0);
-	//enemy = new GameObject("assets/enemy.png", 100, 100);
 	map = new Map();
 
 	Map::LoadMap("assets/Map_16x16", 16, 16);
 
-
-	player.addComponent<TransformComponent>(64,64,3);
-	player.addComponent<SpriteComponent>("assets/All.png",true);
-	player.addComponent<KeyboardController>();
+	//for(auto&& x: Game::path)
+	//std::cout << x << '\n';
+	//player.addComponent<TransformComponent>(64,64,3);
+	//player.addComponent<SpriteComponent>("assets/All.png",true);
+	//player.addComponent<KeyboardController>();
 	
-	player.addComponent<ColliderComponent>("player");
-	player.addGroup(groupPlayers);
-	//player.getComponent<SpriteComponent>().Play("Walk");
+	//player.addComponent<ColliderComponent>("//player");
+	//player.addGroup(group//Players);
+	////player.getComponent<SpriteComponent>().Play("Walk");
 
-	button.addComponent<TransformComponent>(0, 0, 64, 64, 1);//736, 576,
+	button.addComponent<TransformComponent>(736, 576, 64, 64, 1);//736, 576,
 	button.addComponent<SpriteComponent>("assets/Build.png");
 	button.addGroup(groupButtons);
+
+	enemy->addEnemy(192.0, -64.0, 0.0, 1.0);
+	enemyList.emplace(enemyList.end(),enemy);
+	enemy1->addEnemy(192.0, -64.0, 0.0, 1.0);
+	enemyList.emplace(enemyList.end(),enemy1);
+	//printf("enemyList size = %d\n",enemyList.size() );
+
 }
 
 void Game::handleEvents()
@@ -112,29 +115,42 @@ void Game::handleEvents()
 }
 
 void Game::update()
-{
+{	
+
 	manager.refresh();
 	manager.update();
+	currentTime = SDL_GetTicks();
+	//printf("currentTime: %d\n", currentTime );
+	//printf("enemyID %d\n", enemyID );
+	//printf("(currentTime % 3000)= %d\n",(currentTime % 3000) );
+
+	if((currentTime % 2000) < 10 ){
+		if(enemyID < enemyList.size()){
+			enemyID++;
+			//printf("enemyID increased: %d\n", enemyID );
+		}
+	}
+
+	for(int i = 0; i < enemyID; i++){
+		//printf("for loop called: %d\n", i );
+		enemyList[i]->update(i+1);
+	}
 
 	if(onButton){
-		//button.getComponent<SpriteComponent>().setTex("assets/Tower.png");
-		button.getComponent<SpriteComponent>().changeTex();
-
-		onButton = false;
 
 	}
 	for(auto cc: colliders){
-		Collision::AABB(player.getComponent<ColliderComponent>(), *cc);
+		//Collision::AABB(//player.getComponent<ColliderComponent>(), *cc);
 		
 	}
 
-
 }	
 
-auto& tiles(manager.getGroup(groupMap));
-auto& players(manager.getGroup(groupPlayers));
-auto& enemies(manager.getGroup(groupEnemies));
-auto& buttons(manager.getGroup(groupButtons));
+auto& tiles(manager.getGroup(Game::groupMap));
+//auto& players(manager.getGroup(Game::group//Players));
+auto& enemies(manager.getGroup(Game::groupEnemies));
+
+auto& buttons(manager.getGroup(Game::groupButtons));
 
 void Game::render()
 {
@@ -143,10 +159,11 @@ void Game::render()
 	for(auto& t : tiles){
 		t->draw();	
 	}
-	for(auto& p : players){
+	/*/for(auto& p : players){
 		p->draw();	
-	}
+	}*/
 	for(auto& e : enemies){
+		//printf("%s\n","drawing enem" );
 		e->draw();	
 	}
 	for(auto& b : buttons){

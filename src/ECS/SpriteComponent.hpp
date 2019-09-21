@@ -58,7 +58,7 @@ public:
 
 	void setTex(const char* path){
 		texture = TextureManager::LoadTexture(path);
-		printf("%s\n","Loaded Animation Texture" );
+		//printf("Loaded: Texture %s\n",path );
 	}
 	void changeTex(){
 		texture = texture2;
@@ -88,7 +88,7 @@ public:
 	}
 
 	void draw() override{
-		//printf("%s\n","tried to draw" );
+	//	printf("%s\n","tried to draw " );
 		TextureManager::Draw(texture, srcRect, destRect, spriteFlip);
 	}	
 

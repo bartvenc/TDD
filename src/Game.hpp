@@ -5,6 +5,7 @@
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include <vector>
+#include "Vector2D.hpp"
 
 class ColliderComponent;
 
@@ -27,6 +28,19 @@ public:
 	static SDL_Renderer *renderer;
 	static SDL_Event event;
 	static std::vector<ColliderComponent*> colliders;
+	static std::vector<Vector2D> path;
+	int currentTime;
+
+	
+	enum groupLabels : std::size_t
+	{	
+		groupButtons,
+		groupMap,
+		groupPlayers,
+		groupColliders,
+		groupProjectiles,
+		groupEnemies
+	};
 
 private:
 	int cnt = 0;
