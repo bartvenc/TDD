@@ -9,7 +9,9 @@ void Enemy::addEnemy(float x, float y, float velX, float velY){
 	auto& enemy(manager->addEntity());
 	enemy.addComponent<TransformComponent>(x, y, 64, 64, 1);
 	enemy.addComponent<SpriteComponent>("assets/All.png", true);
+	enemy.addComponent<ColliderComponent>("enemy");
 	enemy.addGroup(Game::groupEnemies);
+
 	t = &enemy.getComponent<TransformComponent>();
 	s = &enemy.getComponent<SpriteComponent>();
 	pathLenght = Game::path.size();

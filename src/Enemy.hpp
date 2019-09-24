@@ -8,6 +8,7 @@ class Enemy{
 public: 
 	Enemy(Manager* man);
 	~Enemy();
+	
 	TransformComponent* t;
 	SpriteComponent* s;
 	void init();
