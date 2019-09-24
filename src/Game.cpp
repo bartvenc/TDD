@@ -112,13 +112,20 @@ void Game::handleEvents()
 				break;
 			//just a case test	
 			case SDL_MOUSEBUTTONDOWN:
-			
-				SDL_Point mPosition;
-	    		SDL_GetMouseState( &mPosition.x, &mPosition.y );
-			    if(button.getComponent<SpriteComponent>().isInside(&mPosition)){
+	
+			    if(button.getComponent<SpriteComponent>().isInside(500)){
 	    			onButton = true;
 			    	
 	    			printf("%s\n", "clicked mouse on the button");
+	    		}
+	    		if(event.button.button == SDL_BUTTON_RIGHT){
+	    			onButton = false;
+	    			
+	    		}
+	    	case SDL_KEYDOWN:
+	    		if(event.key.keysym.sym == SDLK_ESCAPE){
+	    			printf("%s\n","SDLK_ESCAPE" );
+	    			onButton = false;
 	    		}
 
 			default:
@@ -126,9 +133,12 @@ void Game::handleEvents()
 		}
 	}
 }
-
+auto& towers(manager.getGroup(Game::groupTowers));
+auto& enemies(manager.getGroup(Game::groupEnemies));
 void Game::update()
 {	
+	int tNr = 0;
+	int eNr = 0;
 	//calls the manager refresh to update exsitings entities
 	manager.refresh();
 	//calls the manager to updates all entities and their componenents
