@@ -6,11 +6,15 @@
 #include "Vector2D.hpp"
 #include "Collision.hpp"
 #include "Enemy.hpp"
+#include "Tower.hpp"
 
 //disposable variables
 int way = 0;
 int enemyID = 0;
 bool onButton;
+int  mouse_x, mouse_y;
+ SDL_Rect curs_dst;
+ SDL_Texture *sprite;
 
 //The map object
 Map* map;
@@ -87,7 +91,7 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 	//player.addGroup(group//Players);
 	////player.getComponent<SpriteComponent>().Play("Walk");
 
-	button.addComponent<TransformComponent>(736, 576, 64, 64, 1);//736, 576,
+	button.addComponent<TransformComponent>(960, 896, 64, 64, 1);//736, 576,
 	button.addComponent<SpriteComponent>("assets/Build.png");
 	button.addGroup(groupButtons);
 
@@ -97,6 +101,8 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 	enemy1->addEnemy(192.0, -64.0, 0.0, 1.0);
 	enemyList.emplace(enemyList.end(),enemy1);
 	//printf("enemyList size = %d\n",enemyList.size() );
+
+	sprite = TextureManager::LoadTexture("assets/T1.png");
 
 }
 
@@ -241,12 +247,19 @@ void Game::render()
 	for(auto& b : buttons){
 		b->draw();	
 	}
-	
+	for(auto& tw : towers){
+		tw->draw();
+	}
+	if(onButton){
+		SDL_RenderCopy(renderer, sprite, NULL, &curs_dst);
+	}
+
 	SDL_RenderPresent(renderer);
+	
 
 }
 void Game::clean()
-{
+{	SDL_DestroyTexture(sprite);
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
