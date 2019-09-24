@@ -142,11 +142,11 @@ void Game::update()
 	//printf("(currentTime % 3000)= %d\n",(currentTime % 3000) );
 
 	//every 2 seconds spawns new enemy, the <10 is here for the margin
-	if((currentTime % 2000) < 10 ){
-		if(enemyID < enemyList.size()){
+	if((currentTime % 2000) < 10 && enemyID < enemyList.size()){
+	
 			enemyID++;
 			//printf("enemyID increased: %d\n", enemyID );
-		}
+		
 	}
 	//loops through the enemy list, according to spawned enemies
 	for(int i = 0; i < enemyID; i++){
