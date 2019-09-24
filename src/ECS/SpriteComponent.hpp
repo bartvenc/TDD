@@ -100,9 +100,11 @@ public:
 		speed = animations[animName].speed;
 	}
 
-	bool isInside(SDL_Point *mPosition){
-		if(SDL_PointInRect(mPosition, &destRect)){
-			printf("%s\n", "inside sprite");
+	bool isInside(int x){
+		SDL_Point mPosition;
+		SDL_GetMouseState( &mPosition.x, &mPosition.y);
+		if(SDL_PointInRect(&mPosition, &destRect)){
+			printf("%d inside sprite\n",x );
 			return true;
 		}
 		return false;
