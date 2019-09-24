@@ -166,21 +166,62 @@ void Game::update()
 
 	if(onButton){
 
+		 SDL_Point mPosition;
+		 //int  mouse_x, mouse_y;
+		 bool pressed = SDL_GetMouseState( &mPosition.x, &mPosition.y );
+		// std::cout<<pressed<<std::endl;
+		 curs_dst = {mPosition.x-32, mPosition.y-32, 64, 64};
+		 
+		 
+		if(pressed & SDL_BUTTON(SDL_BUTTON_LEFT) && !button.getComponent<SpriteComponent>().isInside(500)){
+		 	
+			if(towers.size() == 0){
+				Tower* tower1 = new Tower(&manager);;
+				tower1->addTower(mPosition.x-32, mPosition.y-32);
+				printf("made first Tower: %d\n", towers.size() );
+				onButton = false;
+				break;
+			}else{
+				SDL_Rect pospos = {mPosition.x-32, mPosition.y-32, 64,64};
+				for(auto& t: towers){
+					if(!(t->getComponent<SpriteComponent>().isInside(towers.size()))){ 
+					 	Tower* tower1 = new Tower(&manager);;
+					 	tower1->addTower(mPosition.x-32, mPosition.y-32);
+					 	printf("made Tower: %d\n", towers.size() );
+					 	onButton = false;
+					 	break;
+					}	
+				} 		
+		 	}
+		 }
+		 //!(Collision::AABB(t->getComponent<ColliderComponent>(), pospos))
+	}	//
+
+	for(auto& t: towers){
+
+		for(auto& e: enemies){
+			//Collision::AABB(//player.getComponent<ColliderComponent>(), *cc);
+			if(Collision::CC(t->getComponent<CircleComponent>(), e->getComponent<ColliderComponent>())){
+				printf("Enemie[%d] in range to Tower[%d]\n",eNr, tNr );
+			}
+			eNr ++;
+		}
+		tNr++;
+	//		Collision::CC()
 	}
-	for(auto cc: colliders){
-		//Collision::AABB(//player.getComponent<ColliderComponent>(), *cc);
-		
-	}
+	eNr = 0;
+	tNr = 0;
 
 }	
 
 //gets the list of tiles, enemies, buttons from the manager 
 auto& tiles(manager.getGroup(Game::groupMap));
 //auto& players(manager.getGroup(Game::group//Players));
-auto& enemies(manager.getGroup(Game::groupEnemies));
+
 
 auto& buttons(manager.getGroup(Game::groupButtons));
 
+//auto& towers(manager.getGroup(Game::groupTowers));
 
 //updates all of the sprite positions, and redraw them
 void Game::render()
