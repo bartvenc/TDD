@@ -85,6 +85,35 @@ Vector2D& Vector2D::Zero(){
 	return *this;
 }
 
+Vector2D Vector2D::Normalize(){
+	float mag = Magnitude();
+	//printf("Magnitude %f\n", mag );
+	return Vector2D(x / mag, y / mag);
+}
+
+float Vector2D::Magnitude(){
+	//printf("x = %f, y = %f \n",this->x,this->y );
+	return (float)sqrt((x * x) + (y * y));
+}
+
+/*double Vector2D::Angle(){
+	if (x == 0) // special cases
+        return (y > 0)? 90
+            : (y == 0)? 0
+            : 270;
+    else if (y == 0) // special cases
+        return (x >= 0)? 0
+            : 180;
+    int ret = radToDeg(atanf((float)y/x));
+    if (x < 0 && y < 0) // quadrant Ⅲ
+        ret = 180 + ret;
+    else if (x < 0) // quadrant Ⅱ
+        ret = 180 + ret; // it actually substracts
+    else if (y < 0) // quadrant Ⅳ
+        ret = 270 + (90 + ret); // it actually substracts
+    return ret;
+}*/
+
 std::ostream& operator<<(std::ostream& stream, const Vector2D& vec){
 	stream << "(" << vec.x << "," << vec.y << ")";
 	return stream;
