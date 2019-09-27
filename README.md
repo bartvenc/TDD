@@ -1,7 +1,8 @@
 # TDD
 > Tower defence game project
 
-## Needed Libaries SDL2 and Boost
+## Needed Libaries:
+### SDL2 and Boost
 
 ## Install SDL
 
