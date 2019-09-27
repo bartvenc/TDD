@@ -8,7 +8,18 @@
 #include "Enemy.hpp"
 #include "Tower.hpp"
 
+
+
+#include <boost/range/adaptor/reversed.hpp>
+#include <boost/range/algorithm/copy.hpp>
+#include <boost/assign.hpp>
+#include <boost/range/adaptor/indexed.hpp>
+
+using namespace boost::adaptors;
+
+
 //disposable variables
+int x = 0;
 int way = 0;
 int enemyID = 0;
 bool onButton;
@@ -32,6 +43,8 @@ std::vector<Enemy*> enemyList;
 //List of velocities for enemies, red from Map::LoadMap()
 std::vector<Vector2D> Game::path;
 
+std::vector<Tower*> towerList;
+
 
 //auto& player(manager.addEntity());
 
@@ -39,6 +52,8 @@ auto& button(manager.addEntity());
 //Enemy objects
 Enemy *enemy = new Enemy(&manager);
 Enemy *enemy1 = new Enemy(&manager);
+Enemy *enemy2 = new Enemy(&manager);
+Enemy *enemy3 = new Enemy(&manager);
 //The tile sett for AddTile() function
 const char* mapfile = "assets/TileSet.png";
 
@@ -98,8 +113,15 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 	//iniliasing enemies and putting them into the list
 	enemy->addEnemy(192.0, -64.0, 0.0, 1.0);
 	enemyList.emplace(enemyList.end(),enemy);
+
 	enemy1->addEnemy(192.0, -64.0, 0.0, 1.0);
 	enemyList.emplace(enemyList.end(),enemy1);
+	
+	enemy2->addEnemy(192.0, -64.0, 0.0, 1.0);
+	enemyList.emplace(enemyList.end(),enemy2);
+	
+	enemy3->addEnemy(192.0, -64.0, 0.0, 1.0);
+	enemyList.emplace(enemyList.end(),enemy3);
 	//printf("enemyList size = %d\n",enemyList.size() );
 
 	sprite = TextureManager::LoadTexture("assets/T1.png");
@@ -141,6 +163,7 @@ void Game::handleEvents()
 }
 auto& towers(manager.getGroup(Game::groupTowers));
 auto& enemies(manager.getGroup(Game::groupEnemies));
+auto& projectiles(manager.getGroup(Game::groupProjectiles));
 void Game::update()
 {	
 	int tNr = 0;
@@ -167,7 +190,7 @@ void Game::update()
 	//loops through the enemy list, according to spawned enemies
 	for(int i = 0; i < enemyID; i++){
 		//calls enemy update, to updates animations and velocities
-		enemyList[i]->update(i+1);
+		enemyList[i]->update(0);
 	}
 
 	if(onButton){
@@ -184,15 +207,16 @@ void Game::update()
 			if(towers.size() == 0){
 				Tower* tower1 = new Tower(&manager);;
 				tower1->addTower(mPosition.x-32, mPosition.y-32);
+				towerList.emplace(towerList.end(),tower1);
 				printf("made first Tower: %d\n", towers.size() );
 				onButton = false;
-				break;
 			}else{
 				SDL_Rect pospos = {mPosition.x-32, mPosition.y-32, 64,64};
 				for(auto& t: towers){
 					if(!(t->getComponent<SpriteComponent>().isInside(towers.size()))){ 
-					 	Tower* tower1 = new Tower(&manager);;
+					 	Tower* tower1 = new Tower(&manager);
 					 	tower1->addTower(mPosition.x-32, mPosition.y-32);
+					 	towerList.emplace(towerList.end(),tower1);
 					 	printf("made Tower: %d\n", towers.size() );
 					 	onButton = false;
 					 	break;
@@ -204,20 +228,45 @@ void Game::update()
 	}	//
 
 	for(auto& t: towers){
-
-		for(auto& e: enemies){
+		
+		for(auto& e:boost::adaptors::reverse(enemies)){
+			
 			//Collision::AABB(//player.getComponent<ColliderComponent>(), *cc);
 			if(Collision::CC(t->getComponent<CircleComponent>(), e->getComponent<ColliderComponent>())){
-				printf("Enemie[%d] in range to Tower[%d]\n",eNr, tNr );
+				towerList[tNr]->targetEnemy(e->getComponent<TransformComponent>().position,e->getComponent<TransformComponent>().velocity );
+				
+				//printf("Enemie[%d] in range to Tower[%d]\n",eNr, tNr );
 			}
 			eNr ++;
 		}
+		eNr = 0;
 		tNr++;
-	//		Collision::CC()
+	}tNr = 0;
+	
+	
+	for(auto& t: towerList){
+		t->update();
 	}
-	eNr = 0;
-	tNr = 0;
 
+	for(auto& p : projectiles ){
+		for (auto& e : enemies){
+			//printf("eNr = %d\n", eNr );
+			if(Collision::AABB(p->getComponent<ColliderComponent>(),e->getComponent<ColliderComponent>())){
+				enemyList[eNr]->takeDamage();
+				printf("enemyList[%d].health = %d\n", eNr,enemyList[eNr]->health );
+				//printf("enemyList.begin()+eNr = %d \n",enemyList.begin()+eNr );
+				printf("%s\n","hit!" );	
+				if(enemyList[eNr]->health == 0){
+					printf("eNr = %d, ", eNr );
+					enemyList[eNr]->die();
+					enemyList.erase(enemyList.begin()+eNr);
+					enemyID--;
+				}
+				p->destroy();
+			}
+			eNr++;
+		}eNr=0; 
+	}
 }	
 
 //gets the list of tiles, enemies, buttons from the manager 
@@ -249,6 +298,9 @@ void Game::render()
 	}
 	for(auto& tw : towers){
 		tw->draw();
+	}
+	for(auto& p : projectiles){
+		p->draw();
 	}
 	if(onButton){
 		SDL_RenderCopy(renderer, sprite, NULL, &curs_dst);
