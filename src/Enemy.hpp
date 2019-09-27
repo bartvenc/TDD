@@ -15,8 +15,11 @@ public:
 	void update(int id);
 	void draw();
 	void addEnemy(float x, float y, float velX, float velY);
+	void takeDamage();
+	void die();
 	int pathLenght;
 	int it;
+	int health = 100;
 
 private:
 	Manager* manager;
