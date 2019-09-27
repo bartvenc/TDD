@@ -16,7 +16,7 @@ private:
 	SDL_Rect  srcRect, destRect;
 	SDL_Texture *texture2 = TextureManager::LoadTexture("assets/Tower.png");
 public:
-
+	double angle = 0;
 	int animIndex = 0;
 	std::map<const char*, Animation> animations;
 
@@ -89,7 +89,7 @@ public:
 
 	void draw() override{
 	//	printf("%s\n","tried to draw " );
-		TextureManager::Draw(texture, srcRect, destRect, spriteFlip);
+		TextureManager::Draw(texture, srcRect, destRect, angle, spriteFlip);
 	}	
 
 	void Play(const char* animName){
