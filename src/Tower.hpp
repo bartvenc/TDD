@@ -15,6 +15,9 @@ public:
 	void update();
 	void draw();
 	void addTower(float x, float y);
+	void targetEnemy(Vector2D pos, Vector2D vel);
+	Vector2D enemyPos;
+	bool hasTarget;
 
 
 };
