@@ -8,7 +8,7 @@ OBJS += src/Collision.cpp src/ECS/ECS.cpp src/Enemy.cpp src/Tower.cpp
 DEPS = src/ECS/TransformComponent src/ECS/SpriteComponent.hpp src/ECS/ECS.hpp src/ECS/Components.hpp
 DEPS += src/Vector2D.hpp src/ECS/KeyboardController.hpp src/ECS/ColliderComponent.hpp src/Collision.hpp
 DEPS += src/ECS/TileComponent.hpp src/ECS/Animation.hpp src/Enemy.hpp src/Tower.hpp 
-DEPS += src/MatH.hpp src/ECS/CircleComponent.hpp
+DEPS += src/MatH.hpp src/ECS/CircleComponent.hpp src/ECS/ProjectileComponent.hpp
 
 #CC specifies which compiler we're using
 CC = g++
