@@ -43,3 +43,12 @@ void Enemy::update(int id){
 	//	std::cout << Enemy::t->position <<std::endl;
 }	
 
+void Enemy::takeDamage(){
+	this->health -= 25;
+}
+
+void Enemy::die(){
+
+	printf("Dead Motherfucker\n");
+	t->entity->destroy();
+}
