@@ -1,14 +1,18 @@
 #pragma once
 
-#include "ECS.h"
-#include "Components.h"
-#include "../Vector2D.h"
+#include "ECS.hpp"
+#include "Components.hpp"
+#include "../Vector2D.hpp"
 
 class ProjectileComponent : public Component
 {
 public:
-	ProjectileComponent(int rng, int sp, Vector2D vel) : range(rng), speed(sp), velocity(vel)
-	{}
+	ProjectileComponent(int rng, int sp, Vector2D vel) : range(rng), speed(sp), velocity(vel){
+
+
+	}
+	
+
 	~ProjectileComponent()
 	{}
 
@@ -24,9 +28,11 @@ public:
 
 		if (distance > range)
 		{
-			std::cout << "Out of Range" << std::endl;
+			//std::cout << "Out of Range" << std::endl;
 			entity->destroy();
 		}
+
+
 	}
 
 private:
