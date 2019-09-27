@@ -6,3 +6,4 @@
 #include "ColliderComponent.hpp"
 #include "TileComponent.hpp"
 #include "CircleComponent.hpp"
+#include "ProjectileComponent.hpp"
