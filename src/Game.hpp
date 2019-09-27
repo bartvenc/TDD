@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <vector>
 #include "Vector2D.hpp"
+//#include "Enemy.hpp"
 
 class ColliderComponent;
 
@@ -29,6 +30,7 @@ public:
 	static SDL_Event event;
 	static std::vector<ColliderComponent*> colliders;
 	static std::vector<Vector2D> path;
+	//static std::vector<Enemy*> enemyList;
 	int currentTime;
 
 	
