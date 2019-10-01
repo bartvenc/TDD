@@ -8,13 +8,13 @@
 
 ### Ubuntu
 ```bash
-$ sudo apt install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev
+$ sudo apt install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev clang-format-8
 ```
 
 ### OSX
 
 ```bash
-$ brew install sdl2 sdl2_image sdl2_ttf boost
+$ brew install sdl2 sdl2_image sdl2_ttf boost clang-format
 ```
 
 ## Compile

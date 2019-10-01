@@ -39,3 +39,10 @@ compile : $(OBJS)
 	$(CC) $(OBJS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OBJ_NAME)
 
 all: compile
+
+format:
+	find ./src -name "*[ch]pp" -exec sh -c 'clang-format -sort-includes=false -style=google {} > .clang-tmp; mv .clang-tmp {}' \;
+format8:
+	find ./src -name "*[ch]pp" -exec sh -c 'clang-format-8 -sort-includes=false -style=google {} > .clang-tmp; mv .clang-tmp {}' \;
+
+.PHONY: format
