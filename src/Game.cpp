@@ -7,13 +7,15 @@
 #include "Collision.hpp"
 #include "Enemy.hpp"
 #include "Tower.hpp"
-
+#include "Timer.hpp"
+#include "EnemyManager.hpp"
 
 
 #include <boost/range/adaptor/reversed.hpp>
 #include <boost/range/algorithm/copy.hpp>
 #include <boost/assign.hpp>
 #include <boost/range/adaptor/indexed.hpp>
+
 
 using namespace boost::adaptors;
 
@@ -30,6 +32,7 @@ int  mouse_x, mouse_y;
 //The map object
 Map* map;
 
+
 //The ECS manager object
 Manager manager;
 
@@ -37,23 +40,28 @@ Manager manager;
 SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
 
+int Game::currentTime = 1;
+
 std::vector<ColliderComponent*> Game::colliders;
 //list of enemy objects
-std::vector<Enemy*> enemyList;
+///std::vector<Enemy*> enemyLists;
 //List of velocities for enemies, red from Map::LoadMap()
 std::vector<Vector2D> Game::path;
 
 std::vector<Tower*> towerList;
 
+//Timer *mTimer = Timer::Instance();
+
+EnemyManager  *eM = new EnemyManager(&manager);
 
 //auto& player(manager.addEntity());
 
 auto& button(manager.addEntity());
 //Enemy objects
-Enemy *enemy = new Enemy(&manager);
-Enemy *enemy1 = new Enemy(&manager);
+/*Enemy *enemy = new Enemy(&manager);
+EnemyManager *enemy1 = new Enemy(&manager);
 Enemy *enemy2 = new Enemy(&manager);
-Enemy *enemy3 = new Enemy(&manager);
+Enemy *enemy3 = new Enemy(&manager);*/
 //The tile sett for AddTile() function
 const char* mapfile = "assets/TileSet.png";
 
@@ -110,20 +118,26 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 	button.addComponent<SpriteComponent>("assets/Build.png");
 	button.addGroup(groupButtons);
 
+
+	eM->init();
+
+	//eM->CreateEnemy("BOOBS");
+
+	/*
 	//iniliasing enemies and putting them into the list
 	enemy->addEnemy(192.0, -64.0, 0.0, 1.0);
-	enemyList.emplace(enemyList.end(),enemy);
+	enemyLists.emplace(enemyLists.end(),enemy);
 
 	enemy1->addEnemy(192.0, -64.0, 0.0, 1.0);
-	enemyList.emplace(enemyList.end(),enemy1);
+	enemyLists.emplace(enemyLists.end(),enemy1);
 	
 	enemy2->addEnemy(192.0, -64.0, 0.0, 1.0);
-	enemyList.emplace(enemyList.end(),enemy2);
+	enemyLists.emplace(enemyLists.end(),enemy2);
 	
 	enemy3->addEnemy(192.0, -64.0, 0.0, 1.0);
-	enemyList.emplace(enemyList.end(),enemy3);
-	//printf("enemyList size = %d\n",enemyList.size() );
-
+	enemyLists.emplace(enemyLists.end(),enemy3);
+	//printf("enemyLists size = %d\n",enemyLists.size() );
+*/
 	sprite = TextureManager::LoadTexture("assets/T1.png");
 
 }
@@ -164,34 +178,19 @@ void Game::handleEvents()
 auto& towers(manager.getGroup(Game::groupTowers));
 auto& enemies(manager.getGroup(Game::groupEnemies));
 auto& projectiles(manager.getGroup(Game::groupProjectiles));
+
 void Game::update()
 {	
 	int tNr = 0;
 	int eNr = 0;
+	int hitList = 0;
 	//calls the manager refresh to update exsitings entities
 	manager.refresh();
 	//calls the manager to updates all entities and their componenents
 	//feks position, speed, size etc. 
 	manager.update();
 
-	//gets the time passed from the SDL init()
-	currentTime = SDL_GetTicks();
-	//printf("currentTime: %d\n", currentTime );
-	//printf("enemyID %d\n", enemyID );
-	//printf("(currentTime % 3000)= %d\n",(currentTime % 3000) );
-
-	//every 2 seconds spawns new enemy, the <10 is here for the margin
-	if((currentTime % 2000) < 10 && enemyID < enemyList.size()){
-	
-			enemyID++;
-			//printf("enemyID increased: %d\n", enemyID );
-		
-	}
-	//loops through the enemy list, according to spawned enemies
-	for(int i = 0; i < enemyID; i++){
-		//calls enemy update, to updates animations and velocities
-		enemyList[i]->update(0);
-	}
+	eM->update();
 
 	if(onButton){
 
@@ -223,49 +222,62 @@ void Game::update()
 					}	
 				} 		
 		 	}
-		 }
-		 //!(Collision::AABB(t->getComponent<ColliderComponent>(), pospos))
-	}	//
+		}
+	}
 
 	for(auto& t: towers){
 		
-		for(auto& e:boost::adaptors::reverse(enemies)){
-			
-			//Collision::AABB(//player.getComponent<ColliderComponent>(), *cc);
+		//for(auto& e:boost::adaptors::reverse(enemies)){
+		towerList[tNr]->hitList = false;
+		towerList[tNr]->enemys = NULL;
+		for(auto& e:enemies){
+			towerList[tNr]->hitList = false;
 			if(Collision::CC(t->getComponent<CircleComponent>(), e->getComponent<ColliderComponent>())){
-				towerList[tNr]->targetEnemy(e->getComponent<TransformComponent>().position,e->getComponent<TransformComponent>().velocity );
-				
-				//printf("Enemie[%d] in range to Tower[%d]\n",eNr, tNr );
+				towerList[tNr]->targetEnemy(eM->enemyList[eNr]);
+				//towerList[tNr]->targetEnemy(e->getComponent<TransformComponent>().position,e->getComponent<TransformComponent>().velocity);
+				towerList[tNr]->hitList = true;
+				hitList++;
+				///printf("Enemie[%d] in range to Tower[%d]\n",eNr, tNr );
+				break;
 			}
+			//towerList[tNr]->hitList = false;
 			eNr ++;
 		}
+
+		//towerList[tNr]->update(hitList);
+		//hitList = 0;
 		eNr = 0;
 		tNr++;
 	}tNr = 0;
 	
 	
 	for(auto& t: towerList){
-		t->update();
+		//printf("Tower-sTimer : %d\n", t->sTimer->deltaTime()); 
+		t->update(2);
 	}
 
 	for(auto& p : projectiles ){
 		for (auto& e : enemies){
 			//printf("eNr = %d\n", eNr );
 			if(Collision::AABB(p->getComponent<ColliderComponent>(),e->getComponent<ColliderComponent>())){
-				enemyList[eNr]->takeDamage();
-				printf("enemyList[%d].health = %d\n", eNr,enemyList[eNr]->health );
-				//printf("enemyList.begin()+eNr = %d \n",enemyList.begin()+eNr );
+				eM->enemyList[eNr]->takeDamage(25);
+				//printf("enemyLists[%d].health = %d\n", eNr,enemyLists[eNr]->health );
+				//printf("enemyLists.begin()+eNr = %d \n",enemyLists.begin()+eNr );
 				printf("%s\n","hit!" );	
-				if(enemyList[eNr]->health == 0){
-					printf("eNr = %d, ", eNr );
-					enemyList[eNr]->die();
-					enemyList.erase(enemyList.begin()+eNr);
-					enemyID--;
+				if(eM->enemyList[eNr]->health <= 0){
+					printf("DEA\n");
+					//printf("eNr = %d, ", eNr );
+					e->destroy();
+					//eM->enemyList[eNr]->die();
+
+					eM->enemyList.erase(eM->enemyList.begin()+eNr);
+					eM->enemyNr--;
 				}
 				p->destroy();
 			}
 			eNr++;
-		}eNr=0; 
+		}
+		eNr=0; 
 	}
 }	
 

@@ -5,24 +5,27 @@ Enemy::Enemy(Manager* man) : manager(man){}
 Enemy::~Enemy(){}
 
 void Enemy::addEnemy(float x, float y, float velX, float velY){
-
+	printf("addEnemy()\n" );
 	auto& enemy(manager->addEntity());
 	enemy.addComponent<TransformComponent>(x, y, 64, 64, 1);
-	enemy.addComponent<SpriteComponent>("assets/All.png", true);
+	enemy.addComponent<SpriteComponent>("assets/Ranger.png", true);
 	enemy.addComponent<ColliderComponent>("enemy");
 	enemy.addGroup(Game::groupEnemies);
 
 	t = &enemy.getComponent<TransformComponent>();
 	s = &enemy.getComponent<SpriteComponent>();
 	pathLenght = Game::path.size();
-	int it = 0;
-	//printf("%d\n", pathLenght );
+	it = 0;
+	printf("it= %d\n", it );
 }
 
 void Enemy::update(int id){
-
+	//printf("updating enemyList[%d].health = %d\n",id, health);
 	int posX = static_cast<int>(t->position.x);
 	int posY = static_cast<int>(t->position.y);
+	//printf("id:%d, path[%d] : ",id, it );
+	///std::cout<<Game::path[it]<<std::endl;
+	//std::cout << Enemy::t->position <<std::endl;
 	if(posY%64 == 0 && posX%64 == 0 && it < pathLenght){
 		t->velocity = Game::path[it];
 		//printf("id:%d, path[%d] : ",id, it );
@@ -43,8 +46,9 @@ void Enemy::update(int id){
 	//	std::cout << Enemy::t->position <<std::endl;
 }	
 
-void Enemy::takeDamage(){
-	this->health -= 25;
+void Enemy::takeDamage(int x){
+	this->health -= x;
+	printf("Damage Taken\n");
 }
 
 void Enemy::die(){

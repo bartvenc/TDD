@@ -15,7 +15,7 @@ public:
 	void update(int id);
 	void draw();
 	void addEnemy(float x, float y, float velX, float velY);
-	void takeDamage();
+	void takeDamage(int x);
 	void die();
 	int pathLenght;
 	int it;
