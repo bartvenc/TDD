@@ -5,33 +5,30 @@
 #include <boost/variant.hpp>
 #include <map>
 
-class Tower{
-private:
-Manager* manager;
-public: 
+class Tower {
+ private:
+  Manager* manager;
 
-	Tower(Manager* man);
-	~Tower();
+ public:
+  Tower(Manager* man);
+  ~Tower();
 
-	TransformComponent* t;
-	SpriteComponent* s;
-	CircleComponent * range;
-	//std::vector<Enemy*, Vector2D> enemiesInRange;
-	std::map<Enemy*, Vector2D> objects;
-	Enemy *enemys;
-	void init();
-	void update(int h);
-	void draw();
-	void addTower(float x, float y);
-	void targetEnemy(Enemy *enemy);
-	void targetEnemy(Vector2D pos, Vector2D vel);
+  TransformComponent* t;
+  SpriteComponent* s;
+  CircleComponent* range;
+  // std::vector<Enemy*, Vector2D> enemiesInRange;
+  std::map<Enemy*, Vector2D> objects;
+  Enemy* enemys;
+  void init();
+  void update(int h);
+  void draw();
+  void addTower(float x, float y);
+  void targetEnemy(Enemy* enemy);
+  void targetEnemy(Vector2D pos, Vector2D vel);
 
-	Vector2D enemyPos;
-	Vector2D enemyPosx;
-	bool hasTarget;
-	bool hitList;
-	Timer* sTimer;
-
-
-
+  Vector2D enemyPos;
+  Vector2D enemyPosx;
+  bool hasTarget;
+  bool hitList;
+  Timer* sTimer;
 };

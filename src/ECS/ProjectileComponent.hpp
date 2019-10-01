@@ -4,45 +4,32 @@
 #include "Components.hpp"
 #include "../Vector2D.hpp"
 
-class ProjectileComponent : public Component
-{
-public:
-	ProjectileComponent(int rng, int sp, Vector2D vel) : range(rng), speed(sp), velocity(vel){
+class ProjectileComponent : public Component {
+ public:
+  ProjectileComponent(int rng, int sp, Vector2D vel)
+      : range(rng), speed(sp), velocity(vel) {}
 
+  ~ProjectileComponent() {}
 
-	}
-	
+  void init() override {
+    transform = &entity->getComponent<TransformComponent>();
+    transform->velocity = velocity;
+  }
 
-	~ProjectileComponent()
-	{}
+  void update() override {
+    distance += speed;
 
-	void init() override
-	{
-		transform = &entity->getComponent<TransformComponent>();
-		transform->velocity = velocity;
-	}
+    if (distance > range) {
+      // std::cout << "Out of Range" << std::endl;
+      entity->destroy();
+    }
+  }
 
-	void update() override
-	{
-		distance += speed;
+ private:
+  TransformComponent* transform;
 
-		if (distance > range)
-		{
-			//std::cout << "Out of Range" << std::endl;
-			entity->destroy();
-		}
-
-
-	}
-
-private:
-
-	TransformComponent* transform;
-
-	int range = 0;
-	int speed = 0;
-	int distance = 0;
-	Vector2D velocity;
-
-
+  int range = 0;
+  int speed = 0;
+  int distance = 0;
+  Vector2D velocity;
 };

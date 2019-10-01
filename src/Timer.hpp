@@ -1,41 +1,38 @@
 #pragma once;
 #include <SDL2/SDL.h>
 
+class Timer {
+ private:
+  // The clock time when the timer started
+  int startTicks;
 
+  // The ticks stored when the timer was paused
+  int pausedTicks;
 
-class Timer
-{
-    private:
-    //The clock time when the timer started
-    int startTicks;
+  float dTime;
 
-    //The ticks stored when the timer was paused
-    int pausedTicks;
+  int elapsedTicks;
 
-    float dTime;
+  // The timer status
+  bool paused;
+  bool started;
 
-    int elapsedTicks;
+ public:
+  // Initializes variables
+  Timer();
 
-    //The timer status
-    bool paused;
-    bool started;
+  // The various clock actions
+  void start();
+  void stop();
+  void pause();
+  void unpause();
+  void reset();
+  void update();
 
-    public:
-    //Initializes variables
-    Timer();
-
-    //The various clock actions
-    void start();
-    void stop();
-    void pause();
-    void unpause();
-    void reset();
-    void update();
-
-    //Gets the timer's time
-    int get_ticks();
-    float deltaTime();
-    //Checks the status of the timer
-    bool is_started();
-    bool is_paused();
+  // Gets the timer's time
+  int get_ticks();
+  float deltaTime();
+  // Checks the status of the timer
+  bool is_started();
+  bool is_paused();
 };
