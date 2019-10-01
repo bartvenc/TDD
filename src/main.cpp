@@ -9,6 +9,7 @@ int main(int argc, char * argv[]) {
 
 	Uint32 frameStart;
 	int frameTime;
+	int cnt = 0;
 
 	game = new Game();
 
@@ -27,6 +28,14 @@ int main(int argc, char * argv[]) {
 		if(frameDelay > frameTime){
 			SDL_Delay(frameDelay - frameTime);
 		}
+		cnt++;
+		if((cnt % 60) == 0){
+
+			printf("%d .. 16 = %d\n", cnt,(cnt % 16)  );
+			game->currentTime +=1;
+			cnt =0;	
+		}
+		
 	}
 
 	game->clean();
