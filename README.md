@@ -1,5 +1,5 @@
 # TDD
-> Tower defence game project
+> Tower defence dritt game project
 
 ## Needed Libaries:
 ### SDL2 and Boost
