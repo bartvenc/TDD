@@ -6,6 +6,8 @@
 #include <stdio.h>
 #include <vector>
 #include "Vector2D.hpp"
+#include "ECS/ECS.hpp"
+#include "Timer.hpp"
 //#include "Enemy.hpp"
 
 class ColliderComponent;
@@ -31,9 +33,8 @@ public:
 	static std::vector<ColliderComponent*> colliders;
 	static std::vector<Vector2D> path;
 	//static std::vector<Enemy*> enemyList;
-	int currentTime;
+	static int currentTime;
 
-	
 	enum groupLabels : std::size_t
 	{	
 		groupButtons,
