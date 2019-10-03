@@ -5,7 +5,7 @@
 #include "ECS.hpp"
 
 class KeyboardController : public Component {
-public:
+ public:
   TransformComponent *transform;
   SpriteComponent *sprite;
 

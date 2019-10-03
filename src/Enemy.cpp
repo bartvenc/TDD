@@ -20,7 +20,6 @@ void Enemy::addEnemy(float x, float y, float velX, float velY) {
 }
 
 void Enemy::update(int id) {
-
   int posX = static_cast<int>(t->position.x);
   int posY = static_cast<int>(t->position.y);
 

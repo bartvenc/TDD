@@ -3,7 +3,7 @@
 #include <math.h>
 
 class Vector2D {
-public:
+ public:
   float x;
   float y;
 

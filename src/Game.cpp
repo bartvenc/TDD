@@ -90,7 +90,7 @@ void Game::init(const char *title, int width, int height, bool fullscreen) {
   // loads map cords and id's for tiles.
   Map::LoadMap("assets/Map_16x16", 16, 16);
 
-  button.addComponent<TransformComponent>(960, 896, 64, 64, 1); // 736, 576,
+  button.addComponent<TransformComponent>(960, 896, 64, 64, 1);  // 736, 576,
   button.addComponent<SpriteComponent>("assets/Build.png");
   button.addGroup(groupButtons);
 
@@ -104,28 +104,28 @@ void Game::handleEvents() {
   while (SDL_PollEvent(&event)) {
     // iterates through event type, for eks, keyboard, mouse etc.
     switch (event.type) {
-    case SDL_QUIT:
-      isRunning = false;
-      break;
-    // just a case test
-    case SDL_MOUSEBUTTONDOWN:
+      case SDL_QUIT:
+        isRunning = false;
+        break;
+      // just a case test
+      case SDL_MOUSEBUTTONDOWN:
 
-      if (button.getComponent<SpriteComponent>().isInside(500)) {
-        onButton = true;
+        if (button.getComponent<SpriteComponent>().isInside(500)) {
+          onButton = true;
 
-        printf("%s\n", "clicked mouse on the button");
-      }
-      if (event.button.button == SDL_BUTTON_RIGHT) {
-        onButton = false;
-      }
-    case SDL_KEYDOWN:
-      if (event.key.keysym.sym == SDLK_ESCAPE) {
-        printf("%s\n", "SDLK_ESCAPE");
-        onButton = false;
-      }
+          printf("%s\n", "clicked mouse on the button");
+        }
+        if (event.button.button == SDL_BUTTON_RIGHT) {
+          onButton = false;
+        }
+      case SDL_KEYDOWN:
+        if (event.key.keysym.sym == SDLK_ESCAPE) {
+          printf("%s\n", "SDLK_ESCAPE");
+          onButton = false;
+        }
 
-    default:
-      break;
+      default:
+        break;
     }
   }
 }
@@ -153,11 +153,10 @@ void Game::update() {
 
     if (pressed & SDL_BUTTON(SDL_BUTTON_LEFT) &&
         !button.getComponent<SpriteComponent>().isInside(500)) {
-
       if (checkPlacement()) {
         addTower(mPosition.x - 32, mPosition.y - 32);
         onButton = false;
-      } 
+      }
     }
   }
 

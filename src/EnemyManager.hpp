@@ -9,7 +9,7 @@
 #include <string>
 
 class EnemyManager {
-public:
+ public:
   EnemyManager(Manager *man);
   ~EnemyManager();
 
@@ -24,7 +24,7 @@ public:
   static int enemyNr;
   static std::vector<Enemy *> enemyList;
 
-private:
+ private:
   Manager *manager;
   std::map<std::string, SDL_Texture *> textures;
 };

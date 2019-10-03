@@ -8,7 +8,6 @@ EnemyManager::EnemyManager(Manager *man) : manager(man) {}
 EnemyManager::~EnemyManager() {}
 
 void EnemyManager::init() {
-
   enemyNr = 0;
 
   for (int i = 0; i < 7; i++) {
@@ -24,7 +23,6 @@ void EnemyManager::CreateEnemy(int x) {
 }
 
 void EnemyManager::SpawnEnemy() {
-
   emTimer->update();
 
   // every 2 seconds spawns new enemy, the <10 is here for the margin
@@ -39,7 +37,6 @@ void EnemyManager::update() {
   SpawnEnemy();
 
   for (int i = 0; i < enemyNr; i++) {
-
     // loops through the enemy list, according to spawned enemies
     enemyList[i]->update(i);
   }

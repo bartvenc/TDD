@@ -25,10 +25,7 @@ class SpriteComponent : public Component {
 
   SpriteComponent() = default;
 
-  SpriteComponent(const char* path) {
- 
-    setTex(path);
-  }
+  SpriteComponent(const char* path) { setTex(path); }
 
   SpriteComponent(const char* path, bool isAnimated) {
     animated = isAnimated;
@@ -51,9 +48,7 @@ class SpriteComponent : public Component {
 
   ~SpriteComponent() { SDL_DestroyTexture(texture); }
 
-  void setTex(const char* path) {
-    texture = TextureManager::LoadTexture(path);
-  }
+  void setTex(const char* path) { texture = TextureManager::LoadTexture(path); }
   void changeTex() { texture = texture2; }
 
   void init() override {

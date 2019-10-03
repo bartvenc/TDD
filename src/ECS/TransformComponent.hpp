@@ -3,8 +3,8 @@
 #include "Components.hpp"
 
 class TransformComponent : public Component {
-private:
-public:
+ private:
+ public:
   Vector2D position;
   Vector2D velocity;
 

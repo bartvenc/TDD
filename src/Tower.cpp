@@ -30,11 +30,10 @@ void Tower::targetEnemy(Enemy *enemy) {
 
   enemyPosx * 7;
   enemys = enemy;
-  //printf("Enemys.health %d\n", enemys->health);
+  // printf("Enemys.health %d\n", enemys->health);
 }
 
 void Tower::targetEnemy(Vector2D pos, Vector2D vel) {
-
   Vector2D totarget = (pos + vel * 25) - t->position;
   Vector2D trackTarget = pos - t->position;
 
@@ -48,19 +47,19 @@ void Tower::targetEnemy(Vector2D pos, Vector2D vel) {
 
 void Tower::update(int h) {
   if (enemys != NULL && hitList) {
-   // printf("hasTarget pos: ");
-    //std::cout << enemys->t->position << std::endl;
+    // printf("hasTarget pos: ");
+    // std::cout << enemys->t->position << std::endl;
     hasTarget = true;
   } else {
     hasTarget = false;
   }
 
-  //printf("Tower Update.---\n");
-  //printf("hitList: %d, hasTarget %d \n", hitList, hasTarget);
+  // printf("Tower Update.---\n");
+  // printf("hitList: %d, hasTarget %d \n", hitList, hasTarget);
 
   sTimer->update();
   if ((sTimer->deltaTime() >= 2) && hasTarget) {
-    //printf("Creating projectile with angle: %f\n", s->angle);
+    // printf("Creating projectile with angle: %f\n", s->angle);
     auto &projectile(manager->addEntity());
     projectile.addComponent<TransformComponent>(t->position.x, t->position.y,
                                                 35, 35, 1);
