@@ -11,7 +11,7 @@ void Tower::addTower(float x, float y) {
   tower.addComponent<TransformComponent>(x, y, 64, 64, 1);
   tower.addComponent<SpriteComponent>("assets/T1.png", false);
   tower.addComponent<CircleComponent>(x, y, 128);
-  // tower.addComponent<ColliderComponent>("tower");
+  tower.addComponent<ColliderComponent>("tower");
   tower.addGroup(Game::groupTowers);
   t = &tower.getComponent<TransformComponent>();
   s = &tower.getComponent<SpriteComponent>();
@@ -30,7 +30,7 @@ void Tower::targetEnemy(Enemy *enemy) {
 
   enemyPosx * 7;
   enemys = enemy;
-  printf("Enemys.health %d\n", enemys->health);
+  //printf("Enemys.health %d\n", enemys->health);
 }
 
 void Tower::targetEnemy(Vector2D pos, Vector2D vel) {
@@ -48,19 +48,19 @@ void Tower::targetEnemy(Vector2D pos, Vector2D vel) {
 
 void Tower::update(int h) {
   if (enemys != NULL && hitList) {
-    printf("hasTarget pos: ");
-    std::cout << enemys->t->position << std::endl;
+   // printf("hasTarget pos: ");
+    //std::cout << enemys->t->position << std::endl;
     hasTarget = true;
   } else {
     hasTarget = false;
   }
 
-  printf("Tower Update.---\n");
-  printf("hitList: %d, hasTarget %d \n", hitList, hasTarget);
+  //printf("Tower Update.---\n");
+  //printf("hitList: %d, hasTarget %d \n", hitList, hasTarget);
 
   sTimer->update();
   if ((sTimer->deltaTime() >= 2) && hasTarget) {
-    printf("Creating projectile with angle: %f\n", s->angle);
+    //printf("Creating projectile with angle: %f\n", s->angle);
     auto &projectile(manager->addEntity());
     projectile.addComponent<TransformComponent>(t->position.x, t->position.y,
                                                 35, 35, 1);

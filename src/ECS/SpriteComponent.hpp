@@ -90,7 +90,7 @@ class SpriteComponent : public Component {
     SDL_Point mPosition;
     SDL_GetMouseState(&mPosition.x, &mPosition.y);
     if (SDL_PointInRect(&mPosition, &destRect)) {
-      printf("%d inside sprite\n", x);
+      printf("%d inside sprite cord: %d:%d\n", x, mPosition.x, mPosition.y);
       return true;
     }
     return false;

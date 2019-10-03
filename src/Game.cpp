@@ -18,6 +18,7 @@
 using namespace boost::adaptors;
 
 // disposable variables
+int o = 0;
 int x = 0;
 int way = 0;
 int enemyID = 0;
@@ -152,26 +153,11 @@ void Game::update() {
 
     if (pressed & SDL_BUTTON(SDL_BUTTON_LEFT) &&
         !button.getComponent<SpriteComponent>().isInside(500)) {
-      if (towers.size() == 0) {
-        Tower *tower1 = new Tower(&manager);
-        ;
-        tower1->addTower(mPosition.x - 32, mPosition.y - 32);
-        towerList.emplace(towerList.end(), tower1);
-        printf("made first Tower: %d\n", towers.size());
+
+      if (checkPlacement()) {
+        addTower(mPosition.x - 32, mPosition.y - 32);
         onButton = false;
-      } else {
-        SDL_Rect pospos = {mPosition.x - 32, mPosition.y - 32, 64, 64};
-        for (auto &t : towers) {
-          if (!(t->getComponent<SpriteComponent>().isInside(towers.size()))) {
-            Tower *tower1 = new Tower(&manager);
-            tower1->addTower(mPosition.x - 32, mPosition.y - 32);
-            towerList.emplace(towerList.end(), tower1);
-            printf("made Tower: %d\n", towers.size());
-            onButton = false;
-            break;
-          }
-        }
-      }
+      } 
     }
   }
 
