@@ -16,7 +16,6 @@ class Tower {
   TransformComponent* t;
   SpriteComponent* s;
   CircleComponent* range;
-  // std::vector<Enemy*, Vector2D> enemiesInRange;
   std::map<Enemy*, Vector2D> objects;
   Enemy* enemys;
   void init();

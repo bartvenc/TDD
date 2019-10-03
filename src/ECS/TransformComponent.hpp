@@ -1,10 +1,10 @@
 #pragma once
-#include "Components.hpp"
 #include "../Vector2D.hpp"
+#include "Components.hpp"
 
 class TransformComponent : public Component {
- private:
- public:
+private:
+public:
   Vector2D position;
   Vector2D velocity;
 

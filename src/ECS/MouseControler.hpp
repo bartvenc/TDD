@@ -1,7 +1,7 @@
 #pragma once
 
 class MouseController {
- public:
+public:
   // Initializes internal variables
   MouseController();
 
@@ -12,12 +12,12 @@ class MouseController {
   }
 
   // Handles mouse event
-  void handleEvent(SDL_Event* e);
+  void handleEvent(SDL_Event *e);
 
   // Shows button sprite
   void render();
 
- private:
+private:
   // Top left position
   SDL_Point mPosition;
 

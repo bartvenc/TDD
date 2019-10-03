@@ -26,7 +26,7 @@ class SpriteComponent : public Component {
   SpriteComponent() = default;
 
   SpriteComponent(const char* path) {
-    // printf("%s\n","Loaded Sprite" );
+ 
     setTex(path);
   }
 
@@ -43,12 +43,9 @@ class SpriteComponent : public Component {
     animations.emplace("walkLeft", walkLeft);
     animations.emplace("walkDown", walkDown);
     animations.emplace("walkRight", walkRight);
-    //	printf("%d\n",animations["Walk"].frames );
 
     Play("Idle");
-    //	printf("%s\n","after Play(Idle);" );
 
-    //	printf("%s\n","Loaded Animation Sprites" );
     setTex(path);
   }
 
@@ -56,28 +53,23 @@ class SpriteComponent : public Component {
 
   void setTex(const char* path) {
     texture = TextureManager::LoadTexture(path);
-    // printf("Loaded: Texture %s\n",path );
   }
   void changeTex() { texture = texture2; }
 
   void init() override {
-    // printf("%s\n", "Sprite initiliazed");
     transform = &entity->getComponent<TransformComponent>();
-    // printf("transform x = %d\n",transform->x() );
     srcRect.x = srcRect.y = 0;
     srcRect.w = transform->width;
     srcRect.h = transform->height;
   }
 
   void update() override {
-    // printf("%s\n","Tried updating" );
     if (animated) {
       srcRect.x =
           srcRect.w * static_cast<int>((SDL_GetTicks() / speed) % frames);
     }
 
     srcRect.y = animIndex * transform->height;
-    // printf("%s\n", "updating");
     destRect.x = static_cast<int>(transform->position.x);
     destRect.y = static_cast<int>(transform->position.y);
     destRect.w = transform->width * transform->scale;
@@ -85,13 +77,10 @@ class SpriteComponent : public Component {
   }
 
   void draw() override {
-    //	printf("%s\n","tried to draw " );
     TextureManager::Draw(texture, srcRect, destRect, angle, spriteFlip);
   }
 
   void Play(const char* animName) {
-    // printf("%s\n", animName);
-    //	printf("play frames %d\n",animations["Walk"].frames );
     frames = animations[animName].frames;
     animIndex = animations[animName].index;
     speed = animations[animName].speed;
