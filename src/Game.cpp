@@ -222,6 +222,24 @@ void Game::update() {
   }
 }
 
+void Game::addTower(int x, int y) {
+  towerList.emplace(towerList.end(), new Tower(&manager));
+  towerList.back()->addTower(x, y);
+  printf("Added tower nr: %d \n", towerList.size());
+}
+
+bool Game::checkPlacement() {
+  for (auto &t : towers) {
+    printf("tower:\n");
+    std::cout << t->getComponent<TransformComponent>().position << std::endl;
+    if (t->getComponent<SpriteComponent>().isInside(towers.size())) {
+      printf("Cant placeit here\n");
+      return false;
+    }
+    printf("Spare place\n");
+  }
+  return true;
+}
 // gets the list of tiles, enemies, buttons from the manager
 auto &tiles(manager.getGroup(Game::groupMap));
 // auto& players(manager.getGroup(Game::group//Players));

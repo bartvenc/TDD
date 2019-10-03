@@ -24,6 +24,8 @@ class Game {
   bool running() { return isRunning; }
   void render();
   void clean();
+  void addTower(int x, int y);
+  bool checkPlacement();
 
   static void AddTile(int srcX, int srcY, int xPos, int yPos);
   static SDL_Renderer *renderer;
