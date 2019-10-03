@@ -28,7 +28,7 @@ int main(int argc, char *argv[]) {
     }
     cnt++;
     if ((cnt % 60) == 0) {
-      printf("%d .. 16 = %d\n", cnt, (cnt % 16));
+     // printf("%d .. 16 = %d\n", cnt, (cnt % 16));
       game->currentTime += 1;
       cnt = 0;
     }
