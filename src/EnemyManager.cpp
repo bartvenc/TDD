@@ -39,5 +39,16 @@ void EnemyManager::update() {
   for (int i = 0; i < enemyNr; i++) {
     // loops through the enemy list, according to spawned enemies
     enemyList[i]->update(i);
+    if (enemyList[i]->health <= 0) {
+      printf("DEA\n");
+
+      enemyList[i]->eTimer->update();
+
+      if (enemyList[i]->eTimer->deltaTime() >= 0.11) {
+        enemyList[i]->t->entity->destroy();
+        enemyList.erase(enemyList.begin() + i);
+        enemyNr--;
+      }
+    }
   }
 }
