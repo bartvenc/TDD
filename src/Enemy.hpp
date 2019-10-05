@@ -19,6 +19,7 @@ class Enemy {
   int pathLenght;
   int it;
   int health = 100;
+  Timer* eTimer;
 
  private:
   Manager* manager;

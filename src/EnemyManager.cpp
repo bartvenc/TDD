@@ -26,7 +26,7 @@ void EnemyManager::SpawnEnemy() {
   emTimer->update();
 
   // every 2 seconds spawns new enemy, the <10 is here for the margin
-  if ((emTimer->deltaTime() >= 2) && enemyNr < enemyList.size()) {
+  if ((emTimer->deltaTime() >= 1) && enemyNr < enemyList.size()) {
     emTimer->reset();
     enemyNr++;
     printf("enemyNr increased: %d\n", enemyNr);
