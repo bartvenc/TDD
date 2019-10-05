@@ -8,6 +8,7 @@
 #include "TextureManager.hpp"
 #include "Timer.hpp"
 #include "Tower.hpp"
+#include "TowerManager.hpp"
 #include "Vector2D.hpp"
 
 #include <boost/assign.hpp>
@@ -33,6 +34,10 @@ Map *map;
 // The ECS manager object
 Manager manager;
 
+EnemyManager *eM = new EnemyManager(&manager);
+
+TowerManager *tM = new TowerManager(&manager);
+
 // SDL main game rander object
 SDL_Renderer *Game::renderer = nullptr;
 SDL_Event Game::event;
@@ -46,7 +51,7 @@ std::vector<Vector2D> Game::path;
 
 std::vector<Tower *> towerList;
 
-EnemyManager *eM = new EnemyManager(&manager);
+Timer *gTimer = new Timer();
 
 auto &button(manager.addEntity());
 
@@ -90,7 +95,7 @@ void Game::init(const char *title, int width, int height, bool fullscreen) {
   // loads map cords and id's for tiles.
   Map::LoadMap("assets/Map_16x16", 16, 16);
 
-  button.addComponent<TransformComponent>(960, 896, 64, 64, 1);  // 736, 576,
+  button.addComponent<TransformComponent>(960, 896, 64, 64, 1); // 736, 576,
   button.addComponent<SpriteComponent>("assets/Build.png");
   button.addGroup(groupButtons);
 
@@ -104,28 +109,28 @@ void Game::handleEvents() {
   while (SDL_PollEvent(&event)) {
     // iterates through event type, for eks, keyboard, mouse etc.
     switch (event.type) {
-      case SDL_QUIT:
-        isRunning = false;
-        break;
-      // just a case test
-      case SDL_MOUSEBUTTONDOWN:
+    case SDL_QUIT:
+      isRunning = false;
+      break;
+    // just a case test
+    case SDL_MOUSEBUTTONDOWN:
 
-        if (button.getComponent<SpriteComponent>().isInside(500)) {
-          onButton = true;
+      if (button.getComponent<SpriteComponent>().isInside(500)) {
+        onButton = true;
 
-          printf("%s\n", "clicked mouse on the button");
-        }
-        if (event.button.button == SDL_BUTTON_RIGHT) {
-          onButton = false;
-        }
-      case SDL_KEYDOWN:
-        if (event.key.keysym.sym == SDLK_ESCAPE) {
-          printf("%s\n", "SDLK_ESCAPE");
-          onButton = false;
-        }
+        printf("%s\n", "clicked mouse on the button");
+      }
+      if (event.button.button == SDL_BUTTON_RIGHT) {
+        onButton = false;
+      }
+    case SDL_KEYDOWN:
+      if (event.key.keysym.sym == SDLK_ESCAPE) {
+        printf("%s\n", "SDLK_ESCAPE");
+        onButton = false;
+      }
 
-      default:
-        break;
+    default:
+      break;
     }
   }
 }
@@ -145,6 +150,8 @@ void Game::update() {
 
   eM->update();
 
+  tM->update();
+
   if (onButton) {
     SDL_Point mPosition;
     bool pressed = SDL_GetMouseState(&mPosition.x, &mPosition.y);
@@ -153,35 +160,12 @@ void Game::update() {
 
     if (pressed & SDL_BUTTON(SDL_BUTTON_LEFT) &&
         !button.getComponent<SpriteComponent>().isInside(500)) {
-      if (checkPlacement()) {
-        addTower(mPosition.x - 32, mPosition.y - 32);
+      if (tM->checkPlacement()) {
+        printf("tM->checkPlacement()\n");
+        tM->createTower(mPosition.x - 32, mPosition.y - 32);
         onButton = false;
       }
     }
-  }
-
-  for (auto &t : towers) {
-    towerList[tNr]->hitList = false;
-    towerList[tNr]->enemys = NULL;
-    for (auto &e : enemies) {
-      towerList[tNr]->hitList = false;
-      if (Collision::CC(t->getComponent<CircleComponent>(),
-                        e->getComponent<ColliderComponent>())) {
-        towerList[tNr]->targetEnemy(eM->enemyList[eNr]);
-        // towerList[tNr]->targetEnemy(e->getComponent<TransformComponent>().position,e->getComponent<TransformComponent>().velocity);
-        towerList[tNr]->hitList = true;
-        hitList++;
-        break;
-      }
-      eNr++;
-    }
-    eNr = 0;
-    tNr++;
-  }
-  tNr = 0;
-
-  for (auto &t : towerList) {
-    t->update(2);
   }
 
   for (auto &p : projectiles) {
@@ -191,40 +175,16 @@ void Game::update() {
         eM->enemyList[eNr]->takeDamage(25);
         printf("%s\n", "hit!");
         if (eM->enemyList[eNr]->health <= 0) {
-          printf("DEA\n");
-          // printf("eNr = %d, ", eNr );
-          e->destroy();
-          // eM->enemyList[eNr]->die();
-
-          eM->enemyList.erase(eM->enemyList.begin() + eNr);
-          eM->enemyNr--;
+          eM->enemyList[eNr]->die();
         }
         p->destroy();
       }
-      eNr++;
     }
     eNr = 0;
   }
+  eNr = 0;
 }
 
-void Game::addTower(int x, int y) {
-  towerList.emplace(towerList.end(), new Tower(&manager));
-  towerList.back()->addTower(x, y);
-  printf("Added tower nr: %d \n", towerList.size());
-}
-
-bool Game::checkPlacement() {
-  for (auto &t : towers) {
-    printf("tower:\n");
-    std::cout << t->getComponent<TransformComponent>().position << std::endl;
-    if (t->getComponent<SpriteComponent>().isInside(towers.size())) {
-      printf("Cant placeit here\n");
-      return false;
-    }
-    printf("Spare place\n");
-  }
-  return true;
-}
 // gets the list of tiles, enemies, buttons from the manager
 auto &tiles(manager.getGroup(Game::groupMap));
 // auto& players(manager.getGroup(Game::group//Players));
