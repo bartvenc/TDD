@@ -1,45 +1,48 @@
 #pragma once
 
-#include "Components.hpp"
-#include "SDL2/SDL.h"
 #include "../TextureManager.hpp"
 #include "Animation.hpp"
+#include "Components.hpp"
+#include "SDL2/SDL.h"
 #include <map>
 
 class SpriteComponent : public Component {
- private:
+private:
   bool animated = false;
   int frames = 0;
   int speed = 100;
-  TransformComponent* transform;
-  SDL_Texture* texture;
+  TransformComponent *transform;
+  SDL_Texture *texture;
   SDL_Rect srcRect, destRect;
-  SDL_Texture* texture2 = TextureManager::LoadTexture("assets/Tower.png");
+  SDL_Texture *texture2 = TextureManager::LoadTexture("assets/Tower.png");
 
- public:
+public:
   double angle = 0;
   int animIndex = 0;
-  std::map<const char*, Animation> animations;
+  std::map<const char *, Animation> animations;
 
   SDL_RendererFlip spriteFlip = SDL_FLIP_NONE;
 
   SpriteComponent() = default;
 
-  SpriteComponent(const char* path) { setTex(path); }
+  SpriteComponent(const char *path) { setTex(path); }
 
-  SpriteComponent(const char* path, bool isAnimated) {
+  SpriteComponent(const char *path, bool isAnimated) {
     animated = isAnimated;
-    Animation idle = Animation(0, 8, 100);
-    Animation walkUp = Animation(1, 9, 100);
-    Animation walkLeft = Animation(2, 9, 100);
-    Animation walkDown = Animation(3, 9, 100);
-    Animation walkRight = Animation(4, 9, 100);
+
+    Animation idle = Animation(0, 6, 100);
+    Animation walkUp = Animation(0, 9, 100);
+    Animation walkLeft = Animation(1, 9, 100);
+    Animation walkDown = Animation(2, 9, 100);
+    Animation walkRight = Animation(3, 9, 100);
+    Animation dead = Animation(12, 6, 100);
 
     animations.emplace("Idle", idle);
     animations.emplace("walkUp", walkUp);
     animations.emplace("walkLeft", walkLeft);
     animations.emplace("walkDown", walkDown);
     animations.emplace("walkRight", walkRight);
+    animations.emplace("dead", dead);
 
     Play("Idle");
 
@@ -48,7 +51,7 @@ class SpriteComponent : public Component {
 
   ~SpriteComponent() { SDL_DestroyTexture(texture); }
 
-  void setTex(const char* path) { texture = TextureManager::LoadTexture(path); }
+  void setTex(const char *path) { texture = TextureManager::LoadTexture(path); }
   void changeTex() { texture = texture2; }
 
   void init() override {
@@ -75,7 +78,7 @@ class SpriteComponent : public Component {
     TextureManager::Draw(texture, srcRect, destRect, angle, spriteFlip);
   }
 
-  void Play(const char* animName) {
+  void Play(const char *animName) {
     frames = animations[animName].frames;
     animIndex = animations[animName].index;
     speed = animations[animName].speed;

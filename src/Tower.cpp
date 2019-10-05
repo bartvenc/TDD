@@ -19,9 +19,9 @@ void Tower::addTower(float x, float y) {
   sTimer = new Timer();
 }
 
-void Tower::targetEnemy(Enemy *enemy) {
-  Vector2D targetPos = enemy->t->position;
-  Vector2D targetVel = enemy->t->velocity;
+void Tower::targetEnemy(Entity *enemy) {
+  Vector2D targetPos = enemy->getComponent<TransformComponent>().position;
+  Vector2D targetVel = enemy->getComponent<TransformComponent>().velocity;
   Vector2D totarget = (targetPos + targetVel * 25) - t->position;
 
   enemyPosx = totarget.Normalize();

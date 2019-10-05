@@ -1,19 +1,19 @@
 #pragma once
 #ifndef Game_hpp
 #define Game_hpp
+#include "ECS/ECS.hpp"
+#include "Timer.hpp"
+#include "Vector2D.hpp"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include <vector>
-#include "Vector2D.hpp"
-#include "ECS/ECS.hpp"
-#include "Timer.hpp"
 //#include "Enemy.hpp"
 
 class ColliderComponent;
 
 class Game {
- public:
+public:
   Game();
   ~Game();
 
@@ -24,8 +24,6 @@ class Game {
   bool running() { return isRunning; }
   void render();
   void clean();
-  void addTower(int x, int y);
-  bool checkPlacement();
 
   static void AddTile(int srcX, int srcY, int xPos, int yPos);
   static SDL_Renderer *renderer;
@@ -45,7 +43,7 @@ class Game {
     groupTowers
   };
 
- private:
+private:
   int cnt = 0;
   bool isRunning;
   SDL_Window *window;
