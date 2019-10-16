@@ -1,8 +1,8 @@
 # TDD
-> Tower defence dritt game project
+> Tower defenc game project
 
 ## Needed Libaries:
-### SDL2 and Boost
+### SDL2 and Boost CLANG
 
 ## Install SDL
 
