@@ -41,14 +41,8 @@ void Enemy::update(int id) {
     }
 
   } else {
-    // eTimer->update();
     t->entity->getComponent<ColliderComponent>().collider = {0, 0, 32, 32};
-
-    printf("update: \n");
-    // t->velocity.Zero();
   }
-  // printf("%d: ",id );
-  //	std::cout << Enemy::t->position <<std::endl;
 }
 
 void Enemy::takeDamage(int x) {
@@ -57,12 +51,7 @@ void Enemy::takeDamage(int x) {
 }
 
 void Enemy::die() {
-  // s->Play("dead");
-  // t->entity->getComponent<ColliderComponent>().collider = {0,0,32,32};
-  // SDL_Delay(3000);
   t->velocity.Zero();
   s->Play("dead");
   eTimer->reset();
-  printf("Dead Motherfucker\n");
-  // t->entity->destroy();
 }
