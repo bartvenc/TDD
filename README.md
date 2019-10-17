@@ -1,15 +1,15 @@
-# TDD
-> Tower defence game project written in C++ with SDL2.
+# Tower Defence Desktop
+> Tower defence desktop game (since we all are tired of mobile TD) project written in C++ with SDL2.
 
 ## Current State of the game:
   ECS engine, Animations, Collision Detection, Deterministic Aiming, Generelized Map and Path reading and loading, Enemy and Tower managers are in place and working.
 
-### Latest Aditions:
-- Tower Manager
-- Death Animations(Still buggy)
+### Changelog:
+- Added Tower Manager
+- Added Death Animations(Still buggy)
 
-### Current objectives:
-- implement KiWi GUI 
+### TODO:
+- implement [KiWi GUI](https://github.com/mobius3/KiWi)
 - implement wave manager
 
 ### Latest update showcase:
@@ -18,9 +18,8 @@
 
 # Installation
 ## Dependencies:
-- SDL2
-- Boost 
-- CLANG
+- [SDL2](https://www.libsdl.org/download-2.0.php) 
+- [CLANG](https://clang.llvm.org/)
 
 ### Ubuntu
 ```bash
@@ -30,7 +29,7 @@ $ sudo apt install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev clang-format-8
 ### OSX
 
 ```bash
-$ brew install sdl2 sdl2_image sdl2_ttf boost clang-format
+$ brew install sdl2 sdl2_image sdl2_ttf clang-format
 ```
 
 ## Compile
