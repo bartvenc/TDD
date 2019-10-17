@@ -5,18 +5,22 @@
   ECS engine, Animations, Collision Detection, Deterministic Aiming, Generelized Map and Path reading and loading, Enemy and Tower managers are in place and working.
 
 ### Latest Aditions:
-Tower Manager and Death Animations(Still buggy)
+- Tower Manager
+- Death Animations(Still buggy)
 
-### Current objects:
-To try implement KiWi GUI and wave manager
+### Current objectives:
+- implement KiWi GUI 
+- implement wave manager
 
 ### Latest update showcase:
 ![Death Animation](Demo/Death_Animation_1.gif)
 
-## Needed Libaries:
-### SDL2 and Boost CLANG
 
-## Install SDL
+# Installation
+## Dependencies:
+- SDL2
+- Boost 
+- CLANG
 
 ### Ubuntu
 ```bash
